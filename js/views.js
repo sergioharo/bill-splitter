@@ -1,37 +1,48 @@
 var sh = sh || {};
 
-sh.views.MainView = Backbone.View.extend({
+sh.views = {
+	MainView: Backbone.View.extend({
 
-	className: "list",
+		render: function() {
+			var template = _.template( $("#start_template").html(), {} );
+			this.$el.html( template );
+		}
+		
+	}),
 
-	events: {
-		"click .addSplitBtn": "add",
-	},
+	PersonsView: Backbone.View.extend({
 
-	render: function() {
+		initialize: function () {
+		},
 
-	},
+		render: function() {
+			var template = _.template( $("#search_template").html(), {} );
+			this.$el.html( template );
+		},
 
-	add: function () {
-		$(this.openingMsg).hide("fast");
-	}
+		events: {
+			"click .addSplitBtn": "add",
+		},
 
-});
+		add: function () {
+			$(this.openingMsg).hide("fast");
+		}
 
-sh.views.PersonView = Backbone.View.extend({
+	}),
 
-	className: "li",
+	PersonView: Backbone.View.extend({
 
-	events: {
-		"click .addSplitBtn": "add",
-	},
+		events: {
+			"click .addSplitBtn": "add",
+		},
 
-	render: function() {
+		render: function() {
 
-	},
+		},
 
-	add: function () {
-		$(this.openingMsg).hide("fast");
-	}
+		add: function () {
+			$(this.openingMsg).hide("fast");
+		}
 
-});
+	})
+};
