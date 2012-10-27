@@ -1,7 +1,9 @@
 $(function()
 {
-	var mainView = new sh.views.MainView({
-		openingMsg: ".hero-unit"
-	})
-	
+	var app = new sh.router();
+	Backbone.history.start();
+	/* Backbone.history.start({
+		pushState: true,
+		root: "/~Sergio/bill-splitter/"
+	});	*/
 });
