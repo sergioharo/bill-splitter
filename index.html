@@ -38,14 +38,7 @@
 
         <div class="container">
 
-            <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <h1>Hello, Bill Splitter</h1>
-                <p>This little app will help you split a check into the various people. To get started,
-                    just click on the "Add Split" button.</p>
-            </div>
-
-            <a id="addSplitBtn" class="btn btn-primary btn-block" href="#"><i class="icon-plus icon-white"></i> Add Split</a>
+            <div id="placeholder"></div>
 
             <hr>
 
@@ -61,8 +54,25 @@
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/vendor/underscore.min.js"></script>
         <script src="js/vendor/backbone.min.js"></script>
+        <script src="js/vendor/backbone-relational.js"></script>
 
         <script src="js/models.js"></script>
+        <script src="js/views.js"></script>
+        <script src="js/router.js"></script>
         <script src="js/main.js"></script>
+
+<script type="text/template" id="all_template">
+    <ul class=""></ul>
+</script>
+
+<script type="text/template" id="start_template">
+    <div class="hero-unit">
+        <h1>Hello, Bill Splitter</h1>
+        <p>This little app will help you split a check into the various people. To get started,
+            just click on the "Get Started" button.</p>
+    </div>
+
+    <a class="btn btn-success btn-block" href="#all">Get Started</a>
+</script>
     </body>
 </html>
