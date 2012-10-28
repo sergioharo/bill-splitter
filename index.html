@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>Bill Splitter</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -61,10 +61,6 @@
         <script src="js/router.js"></script>
         <script src="js/main.js"></script>
 
-<script type="text/template" id="all_template">
-    <ul class=""></ul>
-</script>
-
 <script type="text/template" id="start_template">
     <div class="hero-unit">
         <h1>Hello, Bill Splitter</h1>
@@ -72,7 +68,29 @@
             just click on the "Get Started" button.</p>
     </div>
 
-    <a class="btn btn-success btn-block" href="#all">Get Started</a>
+    <button class="btn btn-success btn-block">Get Started</button>
 </script>
+
+<script type="text/template" id="person_template">
+    <div class="label"><%= person.get("name") %></div>
+    <div class="total"><%= person.total() %></div>
+    <div class="subtotal">
+        <span><%= person.subtotal() %></span> +
+        <span><%= person.tax() %></span> +
+        <span><%= person.tip() %></span>
+    </div>
+    <div class="subtotal_desc">
+        <span>subtotal</span> +
+        <span>tax</span> +
+        <span>tip</span>
+    </div>
+</script>
+
+<script type="text/template" id="all_template">
+    <li class="add">
+        <div>Add a new person</div>
+    </li>
+</script>
+
     </body>
 </html>
