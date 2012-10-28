@@ -22,17 +22,30 @@ sh.models.Person = Backbone.RelationalModel.extend({
         },
     }],
 
-    total: function ()
+    initialize: function ()
+    {
+       /* var self = this;
+        this.on("add:splits remove:splits update:splits", function ()
+        {
+            self.trigger("change");
+        });*/
+    },
+
+    subtotal: function ()
     {
     	return _.reduce(this.splits, function(memo, value) { return memo + value.amount}, 0.0)
-    }
+    },
 
     tax: function () {
-        return this.total() * this.options.tax;
-    }
+        return this.subtotal() * .1;//this.options.tax;
+    },
 
     tip: function () {
-        return this.total() * this.options.tip;
+        return this.subtotal() * .15;//this.options.tip;
+    },
+
+    total: function () {
+        return this.subtotal() + this.tax() + this.tip();
     }
 });
 
