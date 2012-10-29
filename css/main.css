@@ -1,12 +1,89 @@
-
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+html {
+	min-height: 100%;
+}
 
+body {
+	box-sizing: border-box;
+	padding-bottom: 37px;
+}
 
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	left: 0;
+	box-sizing: border-box;
+	padding: 8px 20px;
+	border-top: 1px solid #efefef;
+}
 
+.items, .people {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: #eee;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+}
+.items > li, .people > li {
+	height: 44px;
+	padding: 1em;
+	border-bottom: 1px solid #CCC;
+	position: relative;
+}
 
+.items > li:last-child, .people > li:last-child {
+	border-bottom: none;
+}
+
+.people .add-text {
+	font-size: 1.2em;
+	line-height: 44px;
+}
+
+.people .name {
+	font-size: 1.25em;
+}
+
+.people .total {
+	position: absolute;
+	top: 50%;
+	right: 1em;
+	margin-top: -.5em;
+}
+
+.people .desc {
+	position: absolute;
+	bottom: 1em;
+	left: 1em;
+}
+
+.people .subtotal {
+	font-size: .7em;
+	line-height: 1.2em;
+}
+
+.people  .subtotal_desc {
+	font-size: .6em;
+	line-height: 1.2em;
+}
+
+.people .subtotal > td, 
+.people .subtotal_desc > td {
+	padding: 0 2px;
+}
+
+.intro {
+	padding: 20px;
+	margin-bottom: 20px;
+	background-color: #eee;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
 
 
 
