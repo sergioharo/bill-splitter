@@ -71,6 +71,12 @@
     <button class="btn btn-success btn-block">Get Started</button>
 </script>
 
+<script type="text/template" id="all_template">
+    <li class="add">
+        <div>Add a new person</div>
+    </li>
+</script>
+
 <script type="text/template" id="person_template">
     <div class="label"><%= person.get("name") %></div>
     <div class="total"><%= person.total() %></div>
@@ -86,11 +92,15 @@
     </div>
 </script>
 
-<script type="text/template" id="all_template">
-    <li class="add">
-        <div>Add a new person</div>
-    </li>
+<script type="text/template" id="edit_person_template">
+    <button class="btn btn-block">Go back</button>
+    <div>
+        <input type="numeric" class="nameInput" placeholder="Enter name" value="<%= name %>" />
+    </div>
 </script>
 
+<script type="text/template" id="item_template">
+    <input type="numeric" class="amtInput" placeholder="Enter item value" value="<%= (val > 0 ? val : '') %>" />
+</script>
     </body>
 </html>

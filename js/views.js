@@ -1,14 +1,31 @@
 var sh = sh || {};
 
+// Extending Backbone prototype so parametrize the _configuration step
+// so that we can new properties that should be copied to the object
+_.extend(Backbone.View.prototype, {
+	_viewOptions: ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'template', 'app'],
+
+	// Performs the initial configuration of a View with a set of options.
+    // Keys with special meaning *(model, collection, id, className)*, are
+    // attached directly to the view.
+    _configure: function(options) {
+		if (this.options) options = _.extend({}, this.options, options);
+		_.extend(this, _.pick(options, this._viewOptions));
+		this.options = options;
+    },
+});
+
 sh.views = {
 	UpdatingCollectionView: Backbone.View.extend({
+
+		tagName: 'ul',
+		className: 'collection',
+
 		initialize : function(options) {
 			_(this).bindAll('add', 'remove');
 
 			if (!options.childViewConstructor) 
-				throw "no child view constructor provided";
-			if (!options.childViewOptions) 
-				throw "no child view tag name provided";
+				throw 'no child view constructor provided';
 
 			this._childViewConstructor = options.childViewConstructor;
 			this._childViewOptions = options.childViewOptions;
@@ -58,55 +75,44 @@ sh.views = {
 
 	MainView: Backbone.View.extend({
 
-		defaults: {
-			template: "#start_template"
-		},
-
-		initialize: function () {
-			_.defaults(this.options, this.defaults);
-			Backbone.View.prototype._configure.apply(this, arguments);
-		},
+		template: '#start_template',
 
 		render: function() {
-			var template = _.template( $(this.options.template).html(), {} );
+			var template = _.template( $(this.template).html(), {} );
 			this.$el.html( template );
 			return this;
 		},
 		
 		events: {
-			"click .btn": "start",
+			'click .btn': 'start',
 		},
 
 		start: function () {
-			this.options.app.navigate("all", {trigger: true});
+			this.app.navigate('all', {trigger: true});
 		}
 	}),
 
 	PersonsView: Backbone.View.extend({
 
-		defaults: {
-			tagName: "ul",
-			className: "people",
-			template: "#all_template"
-		},
+		tagName: 'ul',
+		className: 'people',
+		template: '#all_template',
 
 		initialize: function () {
-			_.defaults(this.options, this.defaults);
-			Backbone.View.prototype._configure.apply(this, arguments);
-
 			this._collectionView = new sh.views.UpdatingCollectionView({
 				collection           : this.collection,
 				childViewConstructor : sh.views.PersonView,
 				childViewOptions    : {
 					tagName: 'li',
-					className: "person"
+					className: 'person',
+					app: this.app
 				}
 			});
 		},
 
 		render: function() {
 			// render template
-			var template = _.template( $(this.options.template).html(), {} );
+			var template = _.template( $(this.template).html(), {} );
 			this.$el.html( template );
 
 			// render collection view
@@ -116,31 +122,86 @@ sh.views = {
 		},
 
 		events: {
-			"click .add": "add",
+			'click .add': 'add'
 		},
 
 		add: function () {
-			this.options.app.navigate("add", {trigger: true})
+			this.app.navigate('add', {trigger: true});
 		}
-
 	}),
 
 	PersonView: Backbone.View.extend({
 
-		defaults: {
-			template: "#person_template"
+		template: '#person_template',
+
+		render: function() {
+			var template = _.template( $(this.template).html(), {person: this.model} );
+			this.$el.html( template );
+			return this;
 		},
 
+		events: {
+			'click': 'edit'
+		},
+
+		edit: function () {
+			this.app.navigate("edit/" + this.model.cid, {trigger: true});
+		}
+	}),
+
+	EditPersonView: Backbone.View.extend({
+
+		template: '#edit_person_template',
+
 		initialize: function () {
-			_.defaults(this.options, this.defaults);
-			Backbone.View.prototype._configure.apply(this, arguments);
+			this._items = this.model.get('items');
+
+			this._collectionView = new sh.views.UpdatingCollectionView({
+				className: 'items',
+				collection: this._items,
+				childViewConstructor: sh.views.BillItemView,
+				childViewOptions: {
+					tagName: 'li',
+					className: 'person',
+					app: this.app
+				}
+			});
 		},
 
 		render: function() {
-			var template = _.template( $(this.options.template).html(), {person: this.model} );
+			var template = _.template( $(this.template).html(), { name: this.model.get('name') } );
+			this.$el.html( template )
+					.append(this._collectionView.render().el);
+
+			return this;
+		},
+
+		events: {
+			'change .nameInput': 'nameChanged',
+			'click .btn': 'goBack',
+		},
+
+		nameChanged: function () {
+			this.model.set("name", this.$(".nameInput").val());
+		},
+
+		goBack: function () {
+			if (this.options.mode == "add" && this.model.get("name"))
+				this.collection.add(this.model);
+			this.app.navigate("all", {trigger: true});
+		}
+	}),
+
+	BillItemView: Backbone.View.extend({
+
+		template: '#item_template',
+		tagName: 'li',
+		className: 'bill-item',
+
+		render: function() {
+			var template = _.template( $(this.template).html(), { val: this.model.get('amount') } );
 			this.$el.html( template );
 			return this;
 		}
-
 	})
 };
