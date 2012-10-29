@@ -3,9 +3,10 @@ var sh = sh || {};
 sh.router = Backbone.Router.extend({
 
     routes: {
-        "":     "home",
-        "all":  "all",
-        "add":  "add"
+        '':             'home',
+        'all':          'all',
+        'add':          'add',
+        'edit/:cid':    'edit'
     },
 
     initialize: function (options) {
@@ -14,8 +15,9 @@ sh.router = Backbone.Router.extend({
     },
 
     changePage: function (view) {
-        view.render();
-        this.container.empty().append(view.el);
+        this.container
+                .empty()
+                .append(view.render().el);
     },
 
     home: function () {
@@ -34,7 +36,29 @@ sh.router = Backbone.Router.extend({
     },
 
     add: function() {
-        alert("not implemented yet");
+        var model = new sh.models.Person();
+        var view = new sh.views.EditPersonView({ 
+            app: this,
+            collection: this.collection,
+            model: model,
+            mode: 'add'
+        });
+        this.changePage(view);
+    },
+
+    edit: function (cid) {
+        var model = this.collection.getByCid(cid);
+
+        if (!model)
+            throw 'the model does not exist';
+
+        var view = new sh.views.EditPersonView({ 
+            app: this,
+            collection: this.collection,
+            model: model,
+            mode: 'edit'
+        });
+        this.changePage(view);
     }
 
 });
