@@ -5,18 +5,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Bill Splitter</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-        </style>
         <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/main.css">
+        <style>
+            .items, .people {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
 
+            #placeholder {
+                margin: 0;
+            }
+        </style>
         <script src="js/vendor/modernizr-2.6.1.min.js"></script>
     </head>
     <body>
@@ -63,7 +67,7 @@
 
 <script type="text/template" id="start_template">
     <div class="hero-unit">
-        <h1>Hello, Bill Splitter</h1>
+        <h3>Hello, Bill Splitter</h3>
         <p>This little app will help you split a check into the various people. To get started,
             just click on the "Get Started" button.</p>
     </div>
@@ -79,11 +83,11 @@
 
 <script type="text/template" id="person_template">
     <div class="label"><%= person.get("name") %></div>
-    <div class="total"><%= person.total() %></div>
+    <div class="total"><%= person.total().toFixed(2) %></div>
     <div class="subtotal">
-        <span><%= person.subtotal() %></span> +
-        <span><%= person.tax() %></span> +
-        <span><%= person.tip() %></span>
+        <span><%= person.subtotal().toFixed(2) %></span> +
+        <span><%= person.tax().toFixed(2) %></span> +
+        <span><%= person.tip().toFixed(2) %></span>
     </div>
     <div class="subtotal_desc">
         <span>subtotal</span> +
@@ -100,7 +104,7 @@
 </script>
 
 <script type="text/template" id="item_template">
-    <input type="numeric" class="amtInput" placeholder="Enter item value" value="<%= (val > 0 ? val : '') %>" />
+    <input type="numeric" class="amtInput" placeholder="Enter item value" value="<%= (isNaN(val) ? '' : val.toFixed(2)) %>" />
 </script>
     </body>
 </html>
