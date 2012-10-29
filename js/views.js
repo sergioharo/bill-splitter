@@ -154,6 +154,8 @@ sh.views = {
 		template: '#edit_person_template',
 
 		initialize: function () {
+			_.bindAll(this, ["setupItems"]);
+
 			this._items = this.model.get('items');
 
 			this._collectionView = new sh.views.UpdatingCollectionView({
@@ -166,19 +168,37 @@ sh.views = {
 					app: this.app
 				}
 			});
+
+			this._items.on("change", this.setupItems);
 		},
 
 		render: function() {
+			this.setupItems();
+
 			var template = _.template( $(this.template).html(), { name: this.model.get('name') } );
-			this.$el.html( template )
+			this.$el.html(template)
 					.append(this._collectionView.render().el);
 
 			return this;
 		},
 
+		removeEmptyItems: function (exceptFor) {
+			var items = this._items;
+			var empty = items.filter(function (item) { return item.isNull(); });
+			_.each(empty, function (item) { if (item != exceptFor) items.remove(item); });
+		},
+
+		setupItems: function () {
+			var lastItem = this._items.last();
+			this.removeEmptyItems(lastItem);
+
+			if (!lastItem || !lastItem.isNull() )
+				this._items.add(new sh.models.BillItem());
+		},
+
 		events: {
 			'change .nameInput': 'nameChanged',
-			'click .btn': 'goBack',
+			'click .btn': 'goBack'
 		},
 
 		nameChanged: function () {
@@ -188,6 +208,8 @@ sh.views = {
 		goBack: function () {
 			if (this.options.mode == "add" && this.model.get("name"))
 				this.collection.add(this.model);
+
+			this.removeEmptyItems();
 			this.app.navigate("all", {trigger: true});
 		}
 	}),
@@ -202,6 +224,16 @@ sh.views = {
 			var template = _.template( $(this.template).html(), { val: this.model.get('amount') } );
 			this.$el.html( template );
 			return this;
-		}
+		},
+
+		events: {
+			'keyup .amtInput': 'amountChanged'
+		},
+
+		amountChanged: function () {
+			var val = parseFloat(this.$(".amtInput").val());
+			this.model.set("amount", val);
+		},
+
 	})
 };
