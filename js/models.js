@@ -7,7 +7,11 @@ sh.models = {};
  -------------------------*/
 sh.models.BillItem = Backbone.RelationalModel.extend({
     defaults: {
-        amount: 0.0
+        amount: NaN
+    },
+
+    isNull: function () {
+        return isNaN(this.get("amount"));
     }
 });
 
@@ -40,7 +44,7 @@ sh.models.Person = Backbone.RelationalModel.extend({
 
     subtotal: function ()
     {
-    	return _.reduce(this.get("items"), function(memo, value) { return memo + value.amount}, 0.0)
+    	return this.get("items").reduce(function(memo, value) { return memo + value.get("amount"); }, 0.0);
     },
 
     tax: function () {
