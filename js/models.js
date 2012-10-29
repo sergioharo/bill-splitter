@@ -5,18 +5,25 @@ sh.models = {};
 /*------------------------
     Individual Split
  -------------------------*/
-sh.models.Split = Backbone.RelationalModel.extend({
-	amount: 0.0
+sh.models.BillItem = Backbone.RelationalModel.extend({
+    defaults: {
+        amount: 0.0
+    }
 });
 
 /*------------------------
  	Person
  -------------------------*/
 sh.models.Person = Backbone.RelationalModel.extend({
+    
+    defaults: {
+        name: ''
+    },
+
     relations: [{
         type: Backbone.HasMany,
-        key: 'splits',
-        relatedModel: 'sh.models.Split',
+        key: 'items',
+        relatedModel: 'sh.models.BillItem',
         reverseRelation: {
             key: 'person'
         },
@@ -33,7 +40,7 @@ sh.models.Person = Backbone.RelationalModel.extend({
 
     subtotal: function ()
     {
-    	return _.reduce(this.splits, function(memo, value) { return memo + value.amount}, 0.0)
+    	return _.reduce(this.get("items"), function(memo, value) { return memo + value.amount}, 0.0)
     },
 
     tax: function () {
