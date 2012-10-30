@@ -11,7 +11,8 @@ sh.models.BillItem = Backbone.RelationalModel.extend({
     },
 
     isNull: function () {
-        return isNaN(this.get("amount"));
+        var amount = this.get("amount");
+        return isNaN(amount) || amount == 0.0;
     }
 });
 
