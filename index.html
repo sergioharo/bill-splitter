@@ -1,74 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Bill Splitter</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bill-splitter : Small web-app to help split a restaurant bill" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+    </head>
+    <body>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
-    <title>Bill-splitter</title>
-  </head>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">Bill Splitter</a>
+                </div>
+            </div>
+        </div>
 
-  <body>
+        <div id="container" class="container"></div> <!-- /container -->
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/sergioharo/bill-splitter">View on GitHub</a>
+        <footer>&copy; Sergio Haro 2012</footer>
 
-          <h1 id="project_title">Bill-splitter</h1>
-          <h2 id="project_tagline">Small web-app to help split a restaurant bill</h2>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/sergioharo/bill-splitter/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/sergioharo/bill-splitter/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/vendor/underscore.min.js"></script>
+        <script src="js/vendor/backbone.min.js"></script>
+        <script src="js/vendor/backbone-relational.js"></script>
+
+        <script src="js/models.js"></script>
+        <script src="js/views.js"></script>
+        <script src="js/router.js"></script>
+        <script src="js/main.js"></script>
+
+<script type="text/template" id="start_template">
+    <div class="intro">
+        <h3>Hello, Bill Splitter</h3>
+        <p>This little app will help you split a check into the various people. To get started,
+            just click on the "Get Started" button.</p>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+    <button class="btn btn-success btn-block btn-large">Get Started</button>
+</script>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<script type="text/template" id="all_template">
+    <li class="add">
+        <div class="add-text">Add a new person</div>
+    </li>
+</script>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<script type="text/template" id="person_template">
+    <div class="name"><%= person.get("name") %></div>
+    <div class="total"><%= person.total().toFixed(2) %></div>
+    <table class="desc">
+        <tr class="subtotal">
+            <td><%= person.subtotal().toFixed(2) %></td> 
+            <td>+</td>
+            <td><%= person.tax().toFixed(2) %></td> 
+            <td>+</td>
+            <td><%= person.tip().toFixed(2) %></td>
+        </tr>
+        <tr class="subtotal_desc">
+            <td>(subtotal)</td> 
+            <td></td>
+            <td>(tax)</td> 
+            <td></td>
+            <td>(tip)</td>
+        </tr>
+    </table>
+</script>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
+<script type="text/template" id="edit_person_template">
+    <div>
+        <% if (mode == 'add') { %>
+        <button class="btn btn-large btn-primary cancel">Cancel</button>
+        <% } %>
+        <button class="btn btn-large btn-success save">Save</button>
+        
     </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Bill-splitter maintained by <a href="https://github.com/sergioharo">sergioharo</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
+    <div class="name">
+        <input type="text" class="nameInput" placeholder="Enter name" value="<%= name %>" />
     </div>
+</script>
 
-    
-
-  </body>
+<script type="text/template" id="item_template">
+    <input type="text" pattern="[0-9]*" class="amtInput" placeholder="Enter item value" value="<%= val %>" />
+</script>
+    </body>
 </html>
