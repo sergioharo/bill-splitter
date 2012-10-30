@@ -145,16 +145,17 @@ sh.views = {
 		},
 
 		edit: function () {
-			this.app.navigate("edit/" + this.model.cid, {trigger: true});
+			this.app.navigate('edit/' + this.model.cid, {trigger: true});
 		}
 	}),
 
 	EditPersonView: Backbone.View.extend({
 
+		className: 'editPerson',
 		template: '#edit_person_template',
 
 		initialize: function () {
-			_.bindAll(this, ["setupItems"]);
+			_.bindAll(this, ['setupItems']);
 
 			this._items = this.model.get('items');
 
@@ -169,13 +170,16 @@ sh.views = {
 				}
 			});
 
-			this._items.on("change", this.setupItems);
+			this._items.on('change', this.setupItems);
 		},
 
 		render: function() {
 			this.setupItems();
 
-			var template = _.template( $(this.template).html(), { name: this.model.get('name') } );
+			var template = _.template( $(this.template).html(), { 
+				name: this.model.get('name'),
+				mode: this.options.mode
+			});
 			this.$el.html(template)
 					.append(this._collectionView.render().el);
 
@@ -198,19 +202,26 @@ sh.views = {
 
 		events: {
 			'change .nameInput': 'nameChanged',
-			'click .btn': 'goBack'
+			'click .cancel': 'cancel',
+			'click .save': 'save'
 		},
 
 		nameChanged: function () {
-			this.model.set("name", this.$(".nameInput").val());
+			this.model.set('name', this.$('.nameInput').val());
 		},
 
-		goBack: function () {
-			if (this.options.mode == "add" && this.model.get("name"))
+		cancel: function () {
+			if (this.options.mode == 'edit')
+				this.removeEmptyItems();
+			this.app.navigate('all', {trigger: true});
+		},
+
+		save: function () {
+			if (this.options.mode == 'add' && this.model.get('name'))
 				this.collection.add(this.model);
 
 			this.removeEmptyItems();
-			this.app.navigate("all", {trigger: true});
+			this.app.navigate('all', {trigger: true});
 		}
 	}),
 
@@ -221,18 +232,54 @@ sh.views = {
 		className: 'bill-item',
 
 		render: function() {
-			var template = _.template( $(this.template).html(), { val: this.model.get('amount') } );
+			var template = _.template( $(this.template).html(), { val: this.getDisplayAmount() } );
 			this.$el.html( template );
 			return this;
 		},
 
 		events: {
-			'keyup .amtInput': 'amountChanged'
+			'focus .amtInput': 'amountFocused',
+			'blur .amtInput': 'amountBlurred',
+			'keydown .amtInput': 'amountChanged'
 		},
 
-		amountChanged: function () {
-			var val = parseFloat(this.$(".amtInput").val());
-			this.model.set("amount", val);
+		getDisplayAmount: function (isFocused) {
+			if (this.model.isNull())
+			{
+				if (isFocused)
+					return '0.00';
+				else
+					return '';
+			}
+			return this.model.get('amount').toFixed(2);
+		},
+
+		amountFocused: function () {
+			this.$('.amtInput').val(this.getDisplayAmount(true));
+		},
+
+		amountBlurred: function () {
+			this.$('.amtInput').val(this.getDisplayAmount());
+		},
+
+		amountChanged: function (e) {
+			var amnt = this.$('.amtInput').val();
+			var val = NaN;
+
+			if (e.keyCode == 8) // backspace
+			{
+				amnt = amnt.slice(0, -1);
+				var val = parseFloat(amnt) / 10.0;
+			}
+			else if (e.keyCode >= 48 && e.keyCode <= 57)
+			{
+				amnt += String.fromCharCode(e.keyCode);
+				var val = parseFloat(amnt) * 10.0;
+			}
+
+			this.model.set('amount', val);
+			this.$('.amtInput').val(this.getDisplayAmount(true));
+			return false;
 		},
 
 	})
