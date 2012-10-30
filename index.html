@@ -85,14 +85,20 @@
 </script>
 
 <script type="text/template" id="edit_person_template">
-    <button class="btn btn-block btn-large btn-primary">Go back</button>
     <div>
-        <input type="numeric" class="nameInput" placeholder="Enter name" value="<%= name %>" />
+        <% if (mode == 'add') { %>
+        <button class="btn btn-large btn-primary cancel">Cancel</button>
+        <% } %>
+        <button class="btn btn-large btn-success save">Save</button>
+        
+    </div>
+    <div class="name">
+        <input type="text" class="nameInput" placeholder="Enter name" value="<%= name %>" />
     </div>
 </script>
 
 <script type="text/template" id="item_template">
-    <input type="numeric" class="amtInput" placeholder="Enter item value" value="<%= (isNaN(val) ? '' : val.toFixed(2)) %>" />
+    <input type="text" pattern="[0-9]*" class="amtInput" placeholder="Enter item value" value="<%= val %>" />
 </script>
     </body>
 </html>

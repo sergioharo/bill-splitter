@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Author's custom styles
+   General Body Styles
    ========================================================================== */
 html {
 	min-height: 100%;
@@ -8,7 +8,16 @@ html {
 body {
 	box-sizing: border-box;
 	padding-bottom: 37px;
+	padding-top: 60px;
 }
+
+@media (max-width: 979px)
+{
+	body {
+		padding-top: 0;
+	}
+}
+
 
 footer {
 	position: absolute;
@@ -20,19 +29,26 @@ footer {
 	border-top: 1px solid #efefef;
 }
 
+/* ==========================================================================
+   Person List
+   ========================================================================== */
+
 .items, .people {
     list-style: none;
     margin: 0;
     padding: 0;
     background: #eee;
     border: 1px solid #CCC;
-    border-radius: 1em;
+    border-radius: 10px;
 }
 .items > li, .people > li {
-	height: 44px;
-	padding: 1em;
+	padding: 10px;
 	border-bottom: 1px solid #CCC;
 	position: relative;
+}
+
+.people > li {
+	height: 44px;
 }
 
 .items > li:last-child, .people > li:last-child {
@@ -51,14 +67,14 @@ footer {
 .people .total {
 	position: absolute;
 	top: 50%;
-	right: 1em;
-	margin-top: -.5em;
+	right: 10px;
+	margin-top: -5px;
 }
 
 .people .desc {
 	position: absolute;
-	bottom: 1em;
-	left: 1em;
+	bottom: 10px;
+	left: 10px;
 }
 
 .people .subtotal {
@@ -76,8 +92,13 @@ footer {
 	padding: 0 2px;
 }
 
+/* ==========================================================================
+   Intro page
+   ========================================================================== */
+
 .intro {
 	padding: 20px;
+	padding-top: 10px;
 	margin-bottom: 20px;
 	background-color: #eee;
 	-webkit-border-radius: 6px;
@@ -85,11 +106,33 @@ footer {
 	border-radius: 6px;
 }
 
+/* ==========================================================================
+   Edit Person
+   ========================================================================== */
 
+.editPerson .name {
+	margin: 10px 0;
+}
 
+.editPerson .nameInput {
+	box-sizing: border-box;
+	padding: 20px 10px;
+	width: 100%;
+	margin: 0;
+}
 
+.items > li {
+	padding-bottom: 1px;
+}
 
-
+.editPerson .amtInput {
+	box-sizing: border-box;
+	padding: 14px 10px;
+	width: 100%;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
 
 
 
