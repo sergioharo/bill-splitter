@@ -73,6 +73,42 @@ sh.views = {
 		}
 	}),
 
+	NavView: Backbone.View.extend({
+
+		initialize: function () {
+			this.leftNav = this.$(".leftNav");
+			this.rightNav = this.$(".rightNav");
+		},
+
+		setLeftNav: function (options) {
+			if (!options) {
+				this.leftNav.hide();
+			}
+			else {
+				this.leftNav.find(".icon-white").attr('class', 'icon-white ' + options.icon);
+				this.leftNav.off("click.nav").on("click.nav", function () {
+					options.callback();
+					return false;
+				});
+				this.leftNav.show();
+			}
+		},
+
+		setRightNav: function (options) {
+			if (!options) {
+				this.rightNav.hide();
+			}
+			else {
+				this.rightNav.find(".icon-white").attr('class', 'icon-white ' + options.icon);
+				this.rightNav.off("click.nav").on("click.nav", function () {
+					options.callback();
+					return false;
+				});
+				this.rightNav.show();
+			}
+		}
+	}),
+
 	MainView: Backbone.View.extend({
 
 		template: '#start_template',
@@ -90,6 +126,54 @@ sh.views = {
 		start: function () {
 			this.app.navigate('all', {trigger: true});
 		}
+	}),
+
+	SettingsView: Backbone.View.extend({
+
+		template: '#settings_template',
+
+		render: function() {
+			var template = _.template( $(this.template).html(), {
+				tax: this.model.get('tax'),
+				tip: this.model.get('tip'),
+				calculateTipBeforeTax: this.model.get('calculateTipBeforeTax')
+			} );
+			this.$el.html( template );
+			return this;
+		},
+		
+		leftNav: function () {
+			return {
+				icon: 'icon-arrow-left',
+				callback: _.bind(function () {
+					this.app.navigate("all", {trigger: true});
+				}, this)
+			};
+		},
+
+		events: {
+			'keyup #taxInput': 'onTax',
+			'keyup #tipInput': 'onTip',
+			'change #calcInput': 'onCalc'
+		},
+
+		onTax: function () {
+			var tax = parseFloat(this.$('#taxInput').val());
+			if(!isNaN(tax))
+				this.model.set('tax', tax);
+		},
+
+		onTip: function () {
+			var tip = parseFloat(this.$('#tipInput').val());
+			if(!isNaN(tip))
+				this.model.set('tip', tip);
+		},
+
+		onCalc: function () {
+			var calc = this.$('#calcInput').is(':checked');
+			this.model.set('calculateTipBeforeTax', calc)
+		}
+
 	}),
 
 	PersonsView: Backbone.View.extend({
@@ -119,6 +203,15 @@ sh.views = {
 			this._collectionView.setElement(this.el);
 			this._collectionView.render();
 			return this;
+		},
+
+		rightNav: function () {
+			return {
+				icon: 'icon-cog',
+				callback: _.bind(function () {
+					this.app.navigate("settings", {trigger: true});
+				}, this)
+			};
 		},
 
 		events: {
@@ -200,10 +293,25 @@ sh.views = {
 				this._items.add(new sh.models.BillItem());
 		},
 
+		leftNav: function () {
+			if (this.options.mode == 'edit')
+				return null;
+
+			return {
+				icon: 'icon-arrow-left',
+				callback: _.bind(this.cancel, this)
+			};
+		},
+
+		rightNav: function () {
+			return {
+				icon: 'icon-ok',
+				callback: _.bind(this.save, this)
+			};
+		},
+
 		events: {
-			'change .nameInput': 'nameChanged',
-			'click .cancel': 'cancel',
-			'click .save': 'save'
+			'change .nameInput': 'nameChanged'
 		},
 
 		nameChanged: function () {
