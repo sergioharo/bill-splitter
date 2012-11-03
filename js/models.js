@@ -2,6 +2,25 @@ var sh = sh || {};
 
 sh.models = {};
 
+sh.models.Settings = Backbone.Model.extend({
+    defaults: {
+        tax: 10,
+        tip: 15,
+        calculateTipBeforeTax: true
+    },
+
+    tax: function (amount) {
+        return amount * (this.get('tax') / 100);
+    },
+
+    tip: function (amount) {
+        if (this.get('calculateTipBeforeTax'))
+            return amount * (this.get('tip') / 100);
+        else
+            return (amount + this.tax(amount)) * (this.get('tip') / 100);
+    }
+});
+
 /*------------------------
     Individual Split
  -------------------------*/
@@ -36,11 +55,7 @@ sh.models.Person = Backbone.RelationalModel.extend({
 
     initialize: function ()
     {
-       /* var self = this;
-        this.on("add:splits remove:splits update:splits", function ()
-        {
-            self.trigger("change");
-        });*/
+
     },
 
     subtotal: function ()
@@ -49,11 +64,11 @@ sh.models.Person = Backbone.RelationalModel.extend({
     },
 
     tax: function () {
-        return this.subtotal() * .1;//this.options.tax;
+        return this.get('settings').tax(this.subtotal());
     },
 
     tip: function () {
-        return this.subtotal() * .15;//this.options.tip;
+        return this.get('settings').tip(this.subtotal());
     },
 
     total: function () {

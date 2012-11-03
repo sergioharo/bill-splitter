@@ -1,6 +1,10 @@
 $(function()
 {
-	var app = new sh.router({ container: $("#container")});
+	var app = new sh.router({ 
+		container: $("#container"),
+		nav: $('.navbar')[0]
+	});
+	
 	Backbone.history.start();
 	/* Backbone.history.start({
 		pushState: true,
