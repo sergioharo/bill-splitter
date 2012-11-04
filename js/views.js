@@ -134,8 +134,8 @@ sh.views = {
 
 		render: function() {
 			var template = _.template( $(this.template).html(), {
-				tax: this.model.get('tax'),
-				tip: this.model.get('tip'),
+				tax: this.model.get('tax').toFixed(2),
+				tip: this.model.get('tip').toFixed(2),
 				calculateTipBeforeTax: this.model.get('calculateTipBeforeTax')
 			} );
 			this.$el.html( template );
@@ -152,21 +152,39 @@ sh.views = {
 		},
 
 		events: {
-			'keyup #taxInput': 'onTax',
-			'keyup #tipInput': 'onTip',
+			'keydown #taxInput': 'onTax',
+			'keydown #tipInput': 'onTip',
 			'change #calcInput': 'onCalc'
 		},
 
-		onTax: function () {
-			var tax = parseFloat(this.$('#taxInput').val());
-			if(!isNaN(tax))
-				this.model.set('tax', tax);
+		valueChanged: function (e, el, attr) {
+			var amnt = el.val();
+			var val = 0;
+
+			if (e.keyCode == 8) // backspace
+			{
+				amnt = amnt.slice(0, -1);
+				val = parseFloat(amnt) / 10.0;
+			}
+			else if (e.keyCode >= 48 && e.keyCode <= 57)
+			{
+				amnt += String.fromCharCode(e.keyCode);
+				val = parseFloat(amnt) * 10.0;
+			}
+
+			if (isNaN(val))
+				val = 0;
+			this.model.set(attr, val);
+			el.val(val.toFixed(2));
+			return false;
+		},
+
+		onTax: function (e) {
+			return this.valueChanged(e, this.$('#taxInput'), 'tax');
 		},
 
 		onTip: function () {
-			var tip = parseFloat(this.$('#tipInput').val());
-			if(!isNaN(tip))
-				this.model.set('tip', tip);
+			return this.valueChanged(e, this.$('#tipInput'), 'tip');
 		},
 
 		onCalc: function () {
@@ -377,18 +395,18 @@ sh.views = {
 			if (e.keyCode == 8) // backspace
 			{
 				amnt = amnt.slice(0, -1);
-				var val = parseFloat(amnt) / 10.0;
+				val = parseFloat(amnt) / 10.0;
 			}
 			else if (e.keyCode >= 48 && e.keyCode <= 57)
 			{
 				amnt += String.fromCharCode(e.keyCode);
-				var val = parseFloat(amnt) * 10.0;
+				val = parseFloat(amnt) * 10.0;
 			}
 
 			this.model.set('amount', val);
 			this.$('.amtInput').val(this.getDisplayAmount(true));
 			return false;
-		},
+		}
 
 	})
 };
