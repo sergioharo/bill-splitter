@@ -12,7 +12,7 @@ _.extend(Backbone.View.prototype, {
 		if (this.options) options = _.extend({}, this.options, options);
 		_.extend(this, _.pick(options, this._viewOptions));
 		this.options = options;
-    },
+    }
 });
 
 sh.views = {
