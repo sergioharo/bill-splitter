@@ -1,0 +1,1 @@
+This is a small web-app to help people split restaurant bills across multiple people. The code can be viewed through the github hosting at http://sergioharo.github.com/bill-splitter/.
