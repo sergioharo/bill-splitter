@@ -67,16 +67,20 @@
     <div class="total"><%= person.total().toFixed(2) %></div>
     <table class="desc">
         <tr class="subtotal">
-            <td><%= person.subtotal().toFixed(2) %></td> 
+            <td>(<%= person.subtotal().toFixed(2) %></td> 
             <td>+</td>
-            <td><%= person.tax().toFixed(2) %></td> 
+            <td><%= person.tax().toFixed(2) %></td>
+            <td>=</td>
+            <td><%= person.subtotalWithTax().toFixed(2) %>)</td>
             <td>+</td>
             <td><%= person.tip().toFixed(2) %></td>
         </tr>
         <tr class="subtotal_desc">
             <td>(subtotal)</td> 
             <td></td>
-            <td>(tax)</td> 
+            <td>(tax)</td>
+            <td></td>
+            <td>(total)</td>
             <td></td>
             <td>(tip)</td>
         </tr>
