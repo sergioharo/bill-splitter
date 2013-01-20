@@ -73,6 +73,10 @@ sh.models.Person = Backbone.RelationalModel.extend({
 
     total: function () {
         return this.subtotal() + this.tax() + this.tip();
+    },
+
+    subtotalWithTax: function ()  {
+        return this.subtotal() + this.tax();
     }
 });
 
