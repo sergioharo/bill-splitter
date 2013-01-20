@@ -183,7 +183,7 @@ sh.views = {
 			return this.valueChanged(e, this.$('#taxInput'), 'tax');
 		},
 
-		onTip: function () {
+		onTip: function (e) {
 			return this.valueChanged(e, this.$('#tipInput'), 'tip');
 		},
 
